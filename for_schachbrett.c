@@ -1,17 +1,26 @@
 #include <stdio.h>
 
 int main(void) {
-    int groesse = 8;
+    int feld = 1;   // 1 = "X", 0 = leer
 
-    for (int zeile = 0; zeile < groesse; zeile++) {
-        for (int spalte = 0; spalte < groesse; spalte++) {
-            if ((zeile + spalte) % 2 == 0) {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (feld == 1) {
                 printf("X ");
+                feld--;
             } else {
                 printf("  ");
+                feld++;
             }
         }
         printf("\n");
+
+        // nächste Zeile mit dem anderen Feld beginnen
+        if (feld == 1) {
+            feld--;
+        } else {
+            feld++;
+        }
     }
 
     return 0;
