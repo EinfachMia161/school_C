@@ -1,47 +1,99 @@
-## Die for-Schleife
+## Die for-Schleife in C
 
-Mit einer **for-Schleife** führst du denselben Code mehrmals aus, entweder **für jedes Element einer Sammlung** oder **eine bestimmte Anzahl von Malen**.
+### Syntax
 
-### Variante 1: Über eine Sammlung laufen (z. B. Python)
+```c
+for (Initialisierung; Bedingung; Schritt) {
+    // Anweisungen
+}
+```
 
-```python
-fruechte = ["Apfel", "Banane", "Kirsche"]
+### Einfaches Beispiel
 
-for frucht in fruechte:
-    print(frucht)
+```c
+#include <stdio.h>
+
+int main(void) {
+    for (int i = 0; i < 5; i++) {
+        printf("%d\n", i);
+    }
+    return 0;
+}
 ```
 
 Ausgabe:
 ```
-Apfel
-Banane
-Kirsche
+0
+1
+2
+3
+4
 ```
 
-Die Variable `frucht` nimmt bei jedem Durchlauf das nächste Element an. Wenn die Liste durchlaufen ist, endet die Schleife.
+### Die drei Teile im Kopf
 
-### Variante 2: Mit Zähler (z. B. JavaScript, Java, C)
+| Teil | Beispiel | Wann ausgeführt |
+|---|---|---|
+| **Initialisierung** | `int i = 0` | genau **einmal** vor dem Start |
+| **Bedingung** | `i < 5` | **vor jedem** Durchlauf; ist sie `0` (falsch), endet die Schleife |
+| **Schritt** | `i++` | **nach jedem** Durchlauf |
 
-```javascript
-for (let i = 0; i < 5; i++) {
-    console.log(i);
+Ablauf: Initialisierung → Bedingung prüfen → Körper ausführen → Schritt → Bedingung prüfen → …
+
+### Typische Anwendung: Array durchlaufen
+
+```c
+int zahlen[] = {4, 8, 15, 16, 23};
+int laenge = sizeof(zahlen) / sizeof(zahlen[0]);   // = 5
+int summe = 0;
+
+for (int i = 0; i < laenge; i++) {
+    summe += zahlen[i];
+}
+printf("Summe: %d\n", summe);   // Summe: 66
+```
+
+In C gibt es kein „for-each“ wie in Python. Du läufst immer über den **Index**.
+
+### C-Besonderheiten
+
+**1. Variable im Schleifenkopf (ab C99)**
+`for (int i = 0; ...)` funktioniert erst ab C99. Bei sehr alten Compilern (C89) musst du `i` vorher deklarieren:
+```c
+int i;
+for (i = 0; i < 5; i++) { ... }
+```
+Wird `i` im Kopf deklariert, existiert die Variable nur innerhalb der Schleife.
+
+**2. Alle Teile sind optional**
+```c
+for (;;) {
+    // Endlosschleife, verlassen z. B. mit break
 }
 ```
 
-Die Klammer hat drei Teile:
+**3. Mehrere Variablen mit dem Komma-Operator**
+```c
+for (int i = 0, j = 10; i < j; i++, j--) {
+    printf("%d %d\n", i, j);
+}
+```
 
-1. **Start:** `let i = 0`. Der Zähler beginnt bei 0.
-2. **Bedingung:** `i < 5`. Solange sie wahr ist, läuft die Schleife weiter.
-3. **Schritt:** `i++`. Nach jedem Durchlauf wird `i` um 1 erhöht.
+**4. `break` und `continue`**
+```c
+for (int i = 0; i < 10; i++) {
+    if (i == 3) continue;   // überspringt den Rest dieses Durchlaufs
+    if (i == 7) break;      // beendet die Schleife sofort
+    printf("%d ", i);
+}
+// Ausgabe: 0 1 2 4 5 6
+```
 
-Ausgabe: `0 1 2 3 4`
+### Häufige Fehler
 
-### Ablauf
+```c
+for (int i = 0; i <= 5; i++)   // <= statt <: greift bei einem Array der Größe 5 auf zahlen[5] zu → undefiniertes Verhalten!
+for (int i = 0; i < 5; i++);   // Semikolon am Ende: die Schleife hat einen leeren Körper, der Block danach läuft nur einmal
+```
 
-1. Startwert setzen
-2. Bedingung prüfen. Ist sie falsch, ist die Schleife zu Ende.
-3. Den Code im Schleifenkörper ausführen
-4. Den Zähler verändern
-5. Zurück zu Schritt 2
-
-**Merksatz:** Die for-Schleife nimmst du, wenn du **vorher weißt, wie oft** oder **über was** du wiederholen willst. Hängt das Ende von einer Bedingung ab, die sich erst während der Ausführung ergibt, passt eine **while-Schleife** meist besser.
+**Merksatz:** Ein Array der Größe `n` hat die Indizes `0` bis `n-1`. Deshalb lautet die Bedingung fast immer `i < n`.
