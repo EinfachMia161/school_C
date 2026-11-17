@@ -1,6 +1,6 @@
 # `const char *` in C
 
-Dieses Dokument erklärt die Zeile aus der [Lösung](README.md#lösung):
+Dieses Dokument erklärt die Zeile aus der [Lösung zu Aufgabe 1](for_schleifen.md#lösung-aufgabe-1):
 
 ```c
 const char *woerter[] = {"", "one", "two", "three", "four",
@@ -227,7 +227,7 @@ Die Umwandlung von `char *` nach `const char *` passiert automatisch, weil Recht
 const const char *p;   // doppeltes const
 ```
 
-Ab **C99** ist das erlaubt. Ein mehrfach angegebener Qualifizierer wirkt wie ein einzelner, das Ergebnis ist also dasselbe wie `const char *p`. In **C89** ist es ein Fehler. Es hat keinen Nutzen, deshalb schreibt man es nicht so.
+Ab **C99** ist das erlaubt. Ein mehrfach angegebener Qualifizierer wirkt wie ein einzelner, das Ergebnis ist also dasselbe wie `const char *p`. In **C89** ist es laut Standard nicht erlaubt. GCC warnt in beiden Fällen (`duplicate 'const'`). Es hat keinen Nutzen, deshalb schreibt man es nicht so.
 
 Gemeint ist meist eine dieser beiden Formen:
 
@@ -246,4 +246,4 @@ const char * const p;   // Zeichen UND Zeiger konstant
 - Für eine veränderbare Kopie nimmst du `char s[] = "...";`.
 - `const char *woerter[]` ist ein Array von Zeigern auf unveränderliche Strings, ideal für feste Wortlisten.
 
-← Zurück zur [README](README.md)
+← Zurück zu [for_schleifen.md](for_schleifen.md)

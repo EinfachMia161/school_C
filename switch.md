@@ -195,12 +195,12 @@ case 2:
 
 ## Variablen in einem `case`
 
-Vor **C23** darf direkt nach einer `case`-Marke **keine Deklaration** stehen:
+Vor **C23** darf laut Standard direkt nach einer `case`-Marke **keine Deklaration** stehen. Ältere Compiler melden einen Fehler. Neuere GCC-Versionen akzeptieren es stillschweigend und warnen erst mit `-pedantic`. Portabel ist es also nicht:
 
 ```c
 switch (n) {
     case 1:
-        int y = 5;      // Fehler vor C23
+        int y = 5;      // vor C23 nicht erlaubt
         printf("%d\n", y);
         break;
 }
@@ -247,7 +247,7 @@ for (int i = 0; i < 5; i++) {
 
 ## Alternative Lösung der Aufgabe mit `switch`
 
-Die Aufgabe aus der [README](README.md#aufgabe): Für jede Zahl `n` in `[a, b]` soll für 1–9 das englische Wort ausgegeben werden, sonst `even` oder `odd`.
+Die Aufgabe aus [for_schleifen.md](for_schleifen.md#aufgabe-1-zahlen-in-worten): Für jede Zahl `n` in `[a, b]` soll für 1–9 das englische Wort ausgegeben werden, sonst `even` oder `odd`.
 
 ```c
 #include <stdio.h>
@@ -298,7 +298,7 @@ int main(void) {
 | Erweiterbarkeit | neues Wort ins Array eintragen | neuen `case` schreiben |
 | Gefahr | Zugriff außerhalb des Arrays, wenn die Bereichsprüfung fehlt | vergessenes `break` |
 
-Beide Lösungen sind korrekt. Die Array-Variante steht in der [README](README.md#lösung), `const char *` wird in [const-char.md](const-char.md) erklärt.
+Beide Lösungen sind korrekt. Die Array-Variante steht in [for_schleifen.md](for_schleifen.md#lösung-aufgabe-1), `const char *` wird in [const-char.md](const-char.md) erklärt.
 
 ---
 
@@ -321,8 +321,8 @@ Beide Lösungen sind korrekt. Die Array-Variante steht in der [README](README.md
 | `break` vergessen | Code der folgenden `case`-Zweige läuft ungewollt mit. |
 | `case x:` mit Variable | Compiler-Fehler, nur Konstanten sind erlaubt. |
 | `switch` mit String oder `double` | Compiler-Fehler. |
-| Deklaration direkt nach `case` (vor C23) | Compiler-Fehler, Block `{ }` verwenden. |
+| Deklaration direkt nach `case` (vor C23) | Nicht standardkonform, ältere Compiler melden einen Fehler. Block `{ }` verwenden. |
 | `break` soll die Schleife beenden | Beendet nur den `switch`, die Schleife läuft weiter. |
 | `case 1, 2:` | Ist nicht die gewünschte Mehrfachauswahl. Stattdessen `case 1: case 2:` schreiben. |
 
-← Zurück zur [README](README.md)
+← Zurück zu [for_schleifen.md](for_schleifen.md)
