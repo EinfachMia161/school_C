@@ -22,7 +22,7 @@ Ausführliche Erklärung mit allen Aufgabenstellungen: [`for_schleifen.md`](for_
 | [`for_loop.c`](for_loop.c) | Liest zwei Zahlen a und b ein und gibt für jede Zahl dazwischen das englische Wort (1–9) oder `even`/`odd` aus. Aufgabe von [HackerRank](https://www.hackerrank.com/challenges/for-loop-in-c/problem). | `for`-Schleife, Array mit `const char *` |
 | [`for_loop_switch.c`](for_loop_switch.c) | Dieselbe Aufgabe, aber mit `switch` statt Array. | `switch`, `case`, `default`, `break` |
 | [`for_pyramide.c`](for_pyramide.c) | Zeichnet eine Pyramide aus Sternen (1, 3, 5, 7, 9 Sterne pro Zeile). | Verschachtelte `for`-Schleifen |
-| [`for_schachbrett.c`](for_schachbrett.c) | Gibt ein 8×8-Schachbrett aus `X` und Leerzeichen aus. | Verschachtelte Schleifen, `(zeile + spalte) % 2` |
+| [`for_schachbrett.c`](for_schachbrett.c) | Gibt ein 8×8-Schachbrett aus `X` und Leerzeichen aus. Zwei Zeilen wiederholen sich 4-mal, jede Zeile ist ein einziges `printf`. | Struktur erkennen, aneinandergereihte String-Literale |
 
 ### Bedingungen und Benutzereingaben
 
@@ -93,5 +93,6 @@ printf "8\n11\n" | ./for_loop
 - Logische Operatoren `&&` (UND) und `||` (ODER)
 - Modulo-Operator `%` für Teilbarkeit und gerade/ungerade
 - Arrays von Strings mit `const char *`
+- Aneinandergereihte String-Literale (`"X " "  "` wird zu `"X   "`)
 - Ungültige Benutzereingaben abfangen
 - Eigene Funktionen schreiben (`median.cpp`)

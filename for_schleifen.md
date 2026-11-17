@@ -4,7 +4,7 @@ Lösungen und Erklärungen zu drei Übungsaufgaben mit `for`-Schleifen in C:
 
 1. **Zahlen in Worten:** Zahlen eines Intervalls als englisches Wort, `even` oder `odd` ausgeben
 2. **Pyramide:** eine Stern-Pyramide mit verschachtelten Schleifen zeichnen
-3. **Schachbrett:** ein 8×8-Muster aus `X` und Leerzeichen erzeugen
+3. **Schachbrett:** ein 8×8-Muster aus `X` und Leerzeichen erzeugen, indem man die Struktur erkennt
 
 ## Inhalt
 
@@ -97,7 +97,7 @@ for (int i = 0; i < laenge; i++) {
 }
 ```
 
-**Verschachtelte Schleifen.** Eine Schleife im Körper einer anderen läuft bei **jedem** Durchlauf der äußeren komplett durch. Typisch für alles mit Zeilen und Spalten, wie in Aufgabe 2 und 3:
+**Verschachtelte Schleifen.** Eine Schleife im Körper einer anderen läuft bei **jedem** Durchlauf der äußeren komplett durch. Typisch für alles mit Zeilen und Spalten, wie in Aufgabe 2:
 
 ```c
 for (int zeile = 0; zeile < 3; zeile++) {        // äußere Schleife: Zeilen
@@ -278,36 +278,98 @@ X   X   X   X
 #include <stdio.h>
 
 int main(void) {
-    int groesse = 8;
-
-    for (int zeile = 0; zeile < groesse; zeile++) {
-        for (int spalte = 0; spalte < groesse; spalte++) {
-            if ((zeile + spalte) % 2 == 0) {
-                printf("X ");
-            } else {
-                printf("  ");
-            }
-        }
-        printf("\n");
+    // Das Brett besteht aus zwei Zeilen, die sich 4-mal wiederholen.
+    // Jedes String-Literal ist ein Feld: "X " = voll, "  " = leer.
+    for (int i = 0; i < 4; i++) {
+        printf("X " "  " "X " "  " "X " "  " "X " "  " "\n");
+        printf("  " "X " "  " "X " "  " "X " "  " "X " "\n");
     }
-
     return 0;
 }
 ```
 
 ### Erklärung
 
-Der Trick ist die Summe aus Zeile und Spalte. Auf einem Schachbrett wechselt die Farbe bei jedem Schritt nach rechts **und** bei jedem Schritt nach unten. Genau das tut auch `(zeile + spalte) % 2`:
+**Die Struktur erkennen.** Das Brett hat nur **zwei verschiedene Zeilen**:
 
-| | Spalte 0 | Spalte 1 | Spalte 2 | Spalte 3 | … |
-|---|:---:|:---:|:---:|:---:|:---:|
-| **Zeile 0** | 0 → `X` | 1 → leer | 2 → `X` | 3 → leer | … |
-| **Zeile 1** | 1 → leer | 2 → `X` | 3 → leer | 4 → `X` | … |
-| **Zeile 2** | 2 → `X` | 3 → leer | 4 → `X` | 5 → leer | … |
+```
+X   X   X   X        ← Zeile A: beginnt mit einem vollen Feld
+  X   X   X   X      ← Zeile B: beginnt mit einem leeren Feld
+```
 
-- Ist die Summe **gerade**, kommt ein `X` in die Zelle, sonst bleibt sie leer.
-- Die **äußere Schleife** läuft über die 8 Zeilen, die **innere** über die 8 Spalten. Insgesamt werden 8 × 8 = 64 Zellen ausgegeben.
-- Jede Zelle ist **zwei Zeichen breit** (`"X "` oder `"  "`). Weil Zeichen in der Konsole etwa doppelt so hoch wie breit sind, sehen die Zellen so annähernd quadratisch aus. Mit `"X"` und `" "` wird das Brett schmaler.
+Diese beiden Zeilen wiederholen sich **4-mal**, und 4 × 2 = 8 Zeilen. Deshalb läuft die Schleife nur 4-mal und gibt pro Durchlauf beide Zeilen aus. Eine innere Schleife, ein `if` oder ein Modulo braucht man dafür nicht.
+
+**Aneinandergereihte String-Literale.** Stehen in C zwei String-Literale direkt nebeneinander, klebt der Compiler sie zu einem einzigen String zusammen:
+
+```c
+printf("X " "  " "X ");   // ist genau dasselbe wie:
+printf("X   X ");
+```
+
+Das passiert beim Kompilieren und kostet zur Laufzeit nichts. Der Vorteil: Jedes Feld steht als eigenes Stück im Code, man sieht also direkt, dass eine Zeile **8 Felder** hat.
+
+| Literal | Bedeutung |
+|---|---|
+| `"X "` | volles Feld |
+| `"  "` | leeres Feld |
+| `"\n"` | Zeilenende |
+
+**Warum zwei Zeichen pro Feld?** Zeichen in der Konsole sind etwa doppelt so hoch wie breit. Mit nur einem Zeichen pro Feld (`"X"` und `" "`) wirkt das Brett wie ein schmales Rechteck. Mit zwei Zeichen sieht es annähernd quadratisch aus.
+
+### Andere Lösungswege
+
+**Mit einem Umschalter.** Eine Variable `feld` wechselt nach jedem Feld zwischen 1 (`X`) und 0 (leer):
+
+```c
+int feld = 1;   // 1 = "X", 0 = leer
+
+for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+        if (feld == 1) {
+            printf("X ");
+            feld--;
+        } else {
+            printf("  ");
+            feld++;
+        }
+    }
+    printf("\n");
+
+    // nächste Zeile mit dem anderen Feld beginnen
+    if (feld == 1) {
+        feld--;
+    } else {
+        feld++;
+    }
+}
+```
+
+Wichtig ist das zusätzliche Umschalten am Zeilenende. Eine Zeile hat 8 Felder, also eine gerade Anzahl, und danach steht `feld` wieder auf dem Startwert. Ohne diesen Schritt sähen alle Zeilen gleich aus.
+
+**Mit `(zeile + spalte) % 2`.** Auf einem Schachbrett wechselt die Farbe bei jedem Schritt nach rechts **und** nach unten. Ist die Summe aus Zeile und Spalte gerade, kommt ein `X` ins Feld:
+
+```c
+for (int zeile = 0; zeile < 8; zeile++) {
+    for (int spalte = 0; spalte < 8; spalte++) {
+        if ((zeile + spalte) % 2 == 0) {
+            printf("X ");
+        } else {
+            printf("  ");
+        }
+    }
+    printf("\n");
+}
+```
+
+**Vergleich**
+
+| | String-Literale | Umschalter | Modulo |
+|---|---|---|---|
+| Schleifen | 1 | 2 verschachtelte | 2 verschachtelte |
+| `if`/`else` | keine | 2 | 1 |
+| Brettgröße ändern | Zeilen von Hand anpassen | Zahlen in den Schleifen ändern | Zahlen in den Schleifen ändern |
+
+Für ein festes 8×8-Brett ist die Version mit String-Literalen am einfachsten. Soll die Größe variabel sein, sind die anderen beiden flexibler.
 
 ---
 
@@ -355,6 +417,7 @@ Aufgabe 2 und 3 brauchen keine Eingabe, z. B. `./pyramide` bzw. `.\pyramide.exe`
 | Bedingungen in falscher Reihenfolge | Wird zuerst auf gerade/ungerade geprüft, erscheint z. B. für 8 `even` statt `eight`. |
 | `printf("\n")` in der inneren Schleife | Jedes Zeichen landet in einer eigenen Zeile. |
 | `printf("\n")` vergessen | Alles erscheint in einer einzigen langen Zeile. |
+| `printf("")` statt `printf(" ")` | Gibt gar nichts aus. Die leeren Felder fehlen, die `X` rücken zusammen. |
 | Dieselbe Zählvariable innen und außen | Die innere Schleife verändert den Zähler der äußeren, die Ausgabe wird falsch oder die Schleife endet nie. |
 
 ---
